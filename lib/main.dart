@@ -2,6 +2,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,15 +47,6 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // BigCard(pair: pair),
-            // SizedBox(height: 10),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     appState.getNext();
-            //   },
-            //   child: Text('Next'),
-            // ),
-            // SizedBox(height: 20),
             CountdownTimer()
           ],
         ),
@@ -63,45 +55,24 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-class BigCard extends StatelessWidget {
-  const BigCard({
-    super.key,
-    required this.pair,
-  });
-
-  final WordPair pair;
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary
-    );
-
-    return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Text(
-          pair.asLowerCase, 
-          style: style,
-          semanticsLabel: pair.asPascalCase,
-        ),
-      ),
-    );
-  }
-}
-
 class CountdownTimer extends StatefulWidget {
   @override
-  // ignore: library_private_types_in_public_api
   _CountdownTimerState createState() => _CountdownTimerState();
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
+  static const platform = MethodChannel('com.example.timer/stopAudio');
   Timer? _timer;
   int _start = 0;
   bool _isRunning = false;
+
+  Future<void> stopAllAudio() async {
+    try {
+      await platform.invokeMethod('stopAudio');
+    } on PlatformException catch (e) {
+      print("Failed to stop audio: '${e.message}'.");
+    }
+  }
 
   void startTimer() {
     if (_timer != null) {
@@ -117,6 +88,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
         } else {
           _isRunning = false;
           _timer?.cancel();
+          stopAllAudio();
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -250,6 +222,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
   int _seconds() {
     return _start % 60;
   }
+
   @override
   void dispose() {
     if (_timer != null) {
