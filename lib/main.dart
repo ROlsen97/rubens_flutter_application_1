@@ -137,11 +137,11 @@ class _CountdownTimerState extends State<CountdownTimer> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        TextEditingController _controller = TextEditingController();
+        TextEditingController controller = TextEditingController();
         return AlertDialog(
           title: Text('Set Hours'),
           content: TextField(
-            controller: _controller,
+            controller: controller,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(hintText: "Enter hours"),
           ),
@@ -149,7 +149,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                setTime(int.parse(_controller.text), _minutes(), _seconds());
+                setTime(int.parse(controller.text), _minutes(), _seconds());
                 Navigator.of(context).pop();
               },
             ),
@@ -163,11 +163,11 @@ class _CountdownTimerState extends State<CountdownTimer> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        TextEditingController _controller = TextEditingController();
+        TextEditingController controller = TextEditingController();
         return AlertDialog(
           title: Text('Set Minutes'),
           content: TextField(
-            controller: _controller,
+            controller: controller,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(hintText: "Enter minutes"),
           ),
@@ -175,7 +175,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                setTime(_hours(), int.parse(_controller.text), _seconds());
+                setTime(_hours(), int.parse(controller.text), _seconds());
                 Navigator.of(context).pop();
               },
             ),
@@ -189,11 +189,11 @@ class _CountdownTimerState extends State<CountdownTimer> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        TextEditingController _controller = TextEditingController();
+        TextEditingController controller = TextEditingController();
         return AlertDialog(
           title: Text('Set Seconds'),
           content: TextField(
-            controller: _controller,
+            controller: controller,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(hintText: "Enter seconds"),
           ),
@@ -201,7 +201,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                setTime(_hours(), _minutes(), int.parse(_controller.text));
+                setTime(_hours(), _minutes(), int.parse(controller.text));
                 Navigator.of(context).pop();
               },
             ),
@@ -238,21 +238,21 @@ class _CountdownTimerState extends State<CountdownTimer> {
         GestureDetector(
           onTap: setHours,
           child: Text(
-            '${_hours().toString().padLeft(2, '0')}',
+            _hours().toString().padLeft(2, '0'),
             style: TextStyle(fontSize: 48),
           ),
         ),
         GestureDetector(
           onTap: setMinutes,
           child: Text(
-            '${_minutes().toString().padLeft(2, '0')}',
+            _minutes().toString().padLeft(2, '0'),
             style: TextStyle(fontSize: 48),
           ),
         ),
         GestureDetector(
           onTap: setSeconds,
           child: Text(
-            '${_seconds().toString().padLeft(2, '0')}',
+            _seconds().toString().padLeft(2, '0'),
             style: TextStyle(fontSize: 48),
           ),
         ),
