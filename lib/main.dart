@@ -74,47 +74,32 @@ class _CountdownTimerState extends State<CountdownTimer> {
     }
   }
 
-  void startTimer() {
+  void startTimer() async {
     if (_timer != null) {
       _timer?.cancel();
     }
     setState(() {
       _isRunning = true;
     });
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_start > 0) {
-          _start--;
-        } else {
-          _isRunning = false;
-          _timer?.cancel();
-          stopAllAudio();
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Time\'s up!'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            ),
-          );
-        }
-      });
-    });
+  try{
+    await platform.invokeMethod('startTimerService', {'startTimeInMillis': _start * 1000});
+  } on PlatformException catch(e){
+    print("Failed to start timer: ${e.message} ");
+    }
   }
 
-  void stopTimer() {
+  void stopTimer() async{
     if (_timer != null) {
       _timer?.cancel();
     }
     setState(() {
       _isRunning = false;
     });
+    try{
+      await platform.invokeMethod('stopTimerService');
+    } on PlatformException catch(e){
+      print("Failed to stop timer service: ${e.message}");
+    }
   }
 
   void resetTimer() {
@@ -125,6 +110,11 @@ class _CountdownTimerState extends State<CountdownTimer> {
       _start = 0;
       _isRunning = false;
     });
+    try{
+      platform.invokeMethod('stopTimerService');
+    } on PlatformException catch (e){
+      print("Failed to stop timer service: ${e.message}");
+    }
   }
 
   void setTime(int hours, int minutes, int seconds) {
