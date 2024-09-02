@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +84,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
       _isRunning = true;
     });
   try{
-    await platform.invokeMethod('startTimerService', {'startTimeInMillis': _start * 1000});
+    await platform.invokeMethod('startTimeService', {'startTimeInMillis': _start * 1000});
   } on PlatformException catch(e){
     print("Failed to start timer: ${e.message} ");
     }
@@ -96,7 +98,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
       _isRunning = false;
     });
     try{
-      await platform.invokeMethod('stopTimerService');
+      await platform.invokeMethod('stopTimeService');
     } on PlatformException catch(e){
       print("Failed to stop timer service: ${e.message}");
     }
@@ -111,7 +113,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
       _isRunning = false;
     });
     try{
-      platform.invokeMethod('stopTimerService');
+      platform.invokeMethod('stopTimeService');
     } on PlatformException catch (e){
       print("Failed to stop timer service: ${e.message}");
     }

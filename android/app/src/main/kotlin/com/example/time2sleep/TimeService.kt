@@ -21,9 +21,9 @@ class TimeService: Service() {
         wakeLock?.acquire()
     }
 
-    override fun onStartCommand(intent: Intent?, flag: Int, startId: Int): Int{
-        if(intent != null){
-            startTimeInMillis = intent.getLongExtra("startTimeMillis", 0)
+    override fun onStartCommand(intent: Intent?, flag: Int, startId: Int): Int {
+        if (intent != null) {
+            startTimeInMillis = intent.getLongExtra("startTimeInMillis", 0L)  // Ensure this is Long
             remainingTimeInMillis = startTimeInMillis
             startTimer()
         }
@@ -32,20 +32,19 @@ class TimeService: Service() {
 
     private fun startTimer(){
         timerRunning = true
-        val timerThread = Thread{
-            while (timerRunning && remainingTimeInMillis > 0){
+        val timerThread = Thread {
+            while (timerRunning && remainingTimeInMillis > 0) {
                 try {
                     Thread.sleep(1000)
                     remainingTimeInMillis -= 1000
                     Log.d("TimeService", "Remaining time : $remainingTimeInMillis")
-                } catch (e: InterruptedException){
+                } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
             }
-            if(remainingTimeInMillis <= 0){
+            if (remainingTimeInMillis <= 0) {
                 timerRunning = false
                 stopSelf()
-
             }
         }
         timerThread.start()
@@ -56,6 +55,7 @@ class TimeService: Service() {
         timerRunning = false
         wakeLock?.release()
     }
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }

@@ -1,19 +1,9 @@
-package time2sleep
-
-import io.flutter.embedding.android.FlutterActivity
-import android.content.Intent
-import android.content.Context
-import android.media.AudioManager
-import android.view.KeyEvent
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodChannel
-
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "com.example.timer/stopAudio"
-    
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine){
         super.configureFlutterEngine(flutterEngine)
-    
+
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "stopAudio" -> {
@@ -33,9 +23,9 @@ class MainActivity: FlutterActivity() {
                     result.success(null)
                 }
                 "startTimeService" -> {
-                    val startTimeInMillis = call.argument<Long>("starTimeInMillis")!!
+                    val startTimeInMillis = call.argument<Long>("startTimeInMillis")!!
                     val intent = Intent(this, TimeService::class.java)
-                    intent.putExtra("startTimeInMillis", startTimeInMillis)
+                    intent.putExtra("startTimeInMillis", startTimeInMillis)  // Ensure this is Long
                     startService(intent)
                     result.success(null)
                 }
