@@ -74,13 +74,14 @@ class _CountdownTimerState extends State<CountdownTimer> {
     }
   }
 
-  void startTimer() {
+  Future<void> startTimer() async {
     if (_timer != null) {
       _timer?.cancel();
     }
     setState(() {
       _isRunning = true;
     });
+    platform.invokeMethod('stayAwake');
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_start > 0) {
