@@ -81,7 +81,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
     setState(() {
       _isRunning = true;
     });
-    platform.invokeMethod('stayAwake');
+    await platform.invokeMethod('stayAwake');
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_start > 0) {
@@ -89,6 +89,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
         } else {
           _isRunning = false;
           _timer?.cancel();
+          platform.invokeMethod('releaseWakeLock');
           stopAllAudio();
           showDialog(
             context: context,
@@ -109,13 +110,14 @@ class _CountdownTimerState extends State<CountdownTimer> {
     });
   }
 
-  void stopTimer() {
+  void stopTimer() async {
     if (_timer != null) {
       _timer?.cancel();
     }
     setState(() {
       _isRunning = false;
     });
+    await platform.invokeMethod('releaseWakeLock');
   }
 
   void resetTimer() {

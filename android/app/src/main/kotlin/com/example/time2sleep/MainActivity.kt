@@ -41,7 +41,6 @@ class MainActivity: FlutterActivity() {
                             )
                         )
                         result.success(null)
-                        wakeLock.release()
                     } else {
                         result.error("UNAVAILABLE", "AudioManager not available", null)
                     }
@@ -51,7 +50,12 @@ class MainActivity: FlutterActivity() {
                     wakeLock.acquire()
                     result.success(null)
                 }
-
+                "releaseWakeLock" -> {
+                    if(wakeLock.isHeld){
+                        wakeLock.release()
+                    }
+                    result.success(null)
+                }
                 else -> {
                     result.notImplemented()
                 }
