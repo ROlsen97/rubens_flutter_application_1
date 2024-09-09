@@ -7,10 +7,20 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_background/flutter_background.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
-  await AndroidAlarmManager.initialize();
-  await FlutterBackground.initialize();
-  runApp(MyApp());
+
+  final androidConfig = FlutterBackgroundAndroidConfig(
+    notificationTitle: "Background Task Example",
+    notificationText: "Running in the background",
+    notificationImportance: AndroidNotificationImportance.normal,
+    enableWifiLock: true,);
+
+  bool hasPermissions = await FlutterBackground.initialize(androidConfig: androidConfig);
+
+  if (hasPermissions){
+    runApp(MyApp());
+  } else {print("permission not granted");}
 }
 
 class MyApp extends StatelessWidget {
