@@ -16,11 +16,14 @@ void main() async {
     notificationImportance: AndroidNotificationImportance.normal,
     enableWifiLock: true,);
 
+  runApp(MyApp());
+
   bool hasPermissions = await FlutterBackground.initialize(androidConfig: androidConfig);
 
-  if (hasPermissions){
-    runApp(MyApp());
-  } else {print("permission not granted");}
+
+  if (!hasPermissions){
+    print("permission not granted");
+  }
 }
 
 class MyApp extends StatelessWidget {
