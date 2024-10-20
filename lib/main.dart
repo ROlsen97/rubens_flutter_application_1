@@ -1,6 +1,4 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_background/flutter_background.dart';
@@ -30,34 +28,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
+    return MaterialApp(
+        title: 'Countdown Timer',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
         home: MyHomePage(),
-      ),
     );
-  }
-}
-
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
   }
 }
 
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
     return Scaffold(
       body: Center(
         child: Column(
@@ -73,10 +57,10 @@ class MyHomePage extends StatelessWidget {
 
 class CountdownTimer extends StatefulWidget {
   @override
-  _CountdownTimerState createState() => _CountdownTimerState();
+  CountdownTimerState createState() => CountdownTimerState();
 }
 
-class _CountdownTimerState extends State<CountdownTimer> {
+class CountdownTimerState extends State<CountdownTimer> {
   static const platform = MethodChannel('com.example.timer/stopAudio');
   Timer? _timer;
   int _start = 0;
